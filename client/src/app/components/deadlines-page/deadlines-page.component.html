@@ -1,0 +1,108 @@
+<!-- header -->
+<header class="site-header sticky-top bg-light">
+  <nav class="navbar navbar-expand-md navbar-light shadow">
+    <div class="container-md py-2">
+      <a class="navbar-brand fs-4 fw-bolder" routerLink="/">
+        <img class="pb-1" src="../../../assets/logo.svg" width="30" alt=""> Dead
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
+              aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav me-auto">
+        </ul>
+
+        <div class="row row-cols-1 row-cols-md-auto px-2 px-md-0">
+          <a (click)="onCreateClick()" class="btn btn-light btn-outline-success px-0 col px-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Новый дедлайн
+          </a>
+
+          <div class="dropdown px-0 col mt-2 mt-md-0">
+            <a class="btn btn-secondary ms-md-3 pb-2 dropdown-toggle" id="dropdownMenuButton1"
+               data-bs-toggle="dropdown" aria-expanded="false" routerLink="/">
+              {{ user?.name }}
+            </a>
+            <ul class="dropdown-menu" style="min-width: 0 !important;"
+                aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" id="logout" routerLink="/" (click)="onLogOutClick()">Выйти</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Modal window -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width: 600px;">
+    <div class="modal-content p-3">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">{{ activeDeadline ? 'Изменить дедлайн' : 'Новый дедлайн' }}</h5>
+          <button type="button" (click)="onModalClose()" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input name="title" class="form-control form-control-lg mb-3 col-9" type="text"
+                 placeholder="Название дедлайна" aria-label=".form-control-lg example"
+                 [(ngModel)]="title">
+
+          <input name="date" autocomplete="off" id="datepicker" type="date"
+                 class="form-control form-control-lg mb-3 col-3" placeholder="Сроки"
+                 required="" [(ngModel)]="expirationDate">
+
+          <textarea name="description" class="form-control mb-3 h-10" style="height: 250px;" aria-label="Описание"
+                    placeholder="Описание дедлайна" [(ngModel)]="description"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="onModalClose()" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
+          </button>
+          <button type="submit" (click)="onModalSubmit()" data-bs-dismiss="modal" class="btn btn-primary">Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Main content -->
+<main class="mx-auto">
+  <section class="position-relative overflow-hidden container-md">
+    <h1 *ngIf="!deadlines" class="py-3 text-center">У тебя пока нет дедлайнов :(</h1>
+    <h1 *ngIf="deadlines" class="py-3 text-center">Твои дедлайны</h1>
+  </section>
+  <section *ngIf="deadlines" class="container">
+    <div *ngFor="let deadline of deadlines" class="mx-auto col mb-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="m-0">{{ deadline.title }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text text-left ">{{ deadline.description }}</p>
+          <div class="btn-group mb-3">
+            <div>
+              <input type="hidden" name="deadlineId" value="<%- deadlineId %>">
+              <button (click)="onEditCLick(deadline._id)" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Изменить
+              </button>
+            </div>
+            <div class="mx-3">
+              <input type="hidden" name="deadlineId" value="<%- deadlineId %>">
+              <button (click)="onDeleteClick(deadline._id)" name="" class="btn btn-sm btn-outline-danger delete">
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-muted">
+          <div class="d-flex justify-content-end align-items-center">
+            <p class="m-0">до {{ deadline.expirationDate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

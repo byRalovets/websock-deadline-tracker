@@ -1,0 +1,49 @@
+<header class="site-header sticky-top">
+  <nav class="navbar navbar-expand-md navbar-light shadow">
+    <div class="container-md pt-2">
+      <a class="navbar-brand fs-4 fw-bolder" routerLink="/">
+        <img class="pb-2" src="../../../assets/logo.svg" width="30" alt=""> Dead
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
+              aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav me-auto">
+        </ul>
+
+        <div class="row row-cols-1 row-cols-md-auto px-2 px-md-0">
+          <div *ngIf="isAuthenticated" class="dropdown px-0 col mt-2 mt-md-0">
+            <a class="btn btn-secondary ms-md-3 pb-2 dropdown-toggle" id="dropdownMenuButton1"
+               data-bs-toggle="dropdown" aria-expanded="false" routerLink="/">
+              {{ user?.name }}
+            </a>
+            <ul class="dropdown-menu" style="min-width: 0 !important;"
+                aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" id="logout" routerLink="/" (click)="onLogOutClick()">Выйти</a></li>
+            </ul>
+          </div>
+          <div *ngIf="!isAuthenticated" class="col px-0 mt-2 mt-md-0 ms-md-2">
+            <a class="btn btn-outline-success" routerLink="/register">Зарегистрироваться</a>
+          </div>
+          <div *ngIf="!isAuthenticated" class="col px-0 mt-2 mt-md-0 ms-md-2">
+            <a class="btn btn-success" routerLink="/login">Войти</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="position-relative overflow-hidden p-3 p-md-5 text-center" id="">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+      <h1 class="display-4 fw-normal">Dead</h1>
+      <p class="lead fw-normal">Вспоминай о дедлайнах не за день до лабы.<br/>Ставь напоминания, ставь напоминания,<br/>
+        всё равно не поможет.</p>
+
+      <a *ngIf="!isAuthenticated" class="btn btn-success btn-lg" routerLink="/register">Присоединиться</a>
+      <a *ngIf="isAuthenticated" class="btn btn-success btn-lg" routerLink="/deadlines">Мои дедлайны</a>
+    </div>
+  </section>
+</main>
