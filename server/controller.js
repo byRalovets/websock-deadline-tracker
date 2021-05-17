@@ -35,7 +35,7 @@ exports.loginUser = (req, res) => {
             }
             return;
         }
-        res.error(404).send();
+        res.send('404');
     });
 }
 
@@ -48,7 +48,7 @@ exports.registerUser = (req, res) => {
     user.password = md5(user.password);
     user.save(function (err, user) {
         if (err) {
-            res.error(404).send();
+            res.send('404');
         }
         console.log(JSON.stringify(
             {
@@ -76,9 +76,18 @@ exports.registerUser = (req, res) => {
  * @param res - websocket connection for response
  */
 exports.deleteDeadline = (req, res) => {
+    const token = req.token;
+
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) {
+            console.log(token);
+            res.send('401');
+        }
+    });
+
     Deadline.remove({_id: req.deadlineId}, function (err, deadline) {
         if (err) {
-            res.error(404).send();
+            res.send('401');
         }
         console.log(JSON.stringify(
             {
@@ -104,11 +113,20 @@ exports.deleteDeadline = (req, res) => {
  * @param res - websocket connection for response
  */
 exports.updateDeadline = (req, res) => {
+    const token = req.token;
+
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) {
+            console.log(token);
+            res.send('401');
+        }
+    });
+
     const deadlineId = req.deadlineId;
     const deadline = req.deadline;
     Deadline.findOneAndUpdate({_id: deadlineId}, deadline, {new: true}, function (err, deadline) {
         if (err) {
-            res.error(404).send();
+            res.send('401');
         }
         console.log(JSON.stringify(
             {
@@ -134,10 +152,19 @@ exports.updateDeadline = (req, res) => {
  * @param res - websocket connection for response
  */
 exports.createDeadline = (req, res) => {
+    const token = req.token;
+
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) {
+            console.log(token);
+            res.send('401');
+        }
+    });
+
     const newDeadline = new Deadline(req.deadline);
     newDeadline.save(function (err, deadline) {
         if (err) {
-            res.error(404).send();
+            res.send('401');
         }
         console.log(JSON.stringify(
             {
@@ -163,10 +190,20 @@ exports.createDeadline = (req, res) => {
  * @param res - websocket connection for response
  */
 exports.getDeadlines = (req, res) => {
+    const token = req.token;
+
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) {
+            console.log(token);
+            res.send('401');
+        }
+    });
+
     const authorId = req.authorId;
     Deadline.find({authorId: authorId}, function (err, deadlines) {
         if (err) {
-            res.error(404).send();
+            console.log(401);
+            res.send('401');
         }
         console.log(JSON.stringify({
             type: 'GET_DEADLINES_OK',

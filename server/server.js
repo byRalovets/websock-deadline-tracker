@@ -2,6 +2,9 @@ const WebsocketServer = require('ws');
 const webSockServer = new WebsocketServer.Server({port: 8091});
 const deadlines = require('./controller');
 
+// raralovets@gmail.com
+// 28042001
+
 webSockServer.on('connection', function (ws) {
 
     console.log('New connection at ' + new Date());
