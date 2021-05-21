@@ -26,6 +26,7 @@ export class LoginPageComponent implements OnInit {
     const localRouter = this.router;
 
     this.socket.onmessage = function(event) {
+      console.log(event.data);
       const response = JSON.parse(event.data);
 
       console.log(response);

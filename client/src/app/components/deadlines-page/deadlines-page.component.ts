@@ -41,7 +41,8 @@ export class DeadlinesPageComponent implements OnInit {
           {
             type: 'GET_DEADLINES',
             payload: {
-              authorId: u._id
+              authorId: u._id,
+              token: this.tokenStorage.getToken()
             }
           }
         ))
@@ -49,6 +50,10 @@ export class DeadlinesPageComponent implements OnInit {
     }
 
     this.socket.onmessage = event => {
+      if (event.data == '401' || event.data == '404') {
+        console.log('ERROR ' + event.data)
+        return;
+      }
       const response = JSON.parse(event.data);
 
       console.log(response);
@@ -77,7 +82,7 @@ export class DeadlinesPageComponent implements OnInit {
       }
 
       if (response.type == 'DELETE_DEADLINE_OK') {
-        console.log('Successfully deleted');
+        // console.log('Successfully deleted');
       }
     };
   }
@@ -97,7 +102,8 @@ export class DeadlinesPageComponent implements OnInit {
             {
               type: 'DELETE_DEADLINE',
               payload: {
-                deadlineId: id
+                deadlineId: id,
+                token: this.tokenStorage.getToken()
               }
             }
           ));
@@ -118,10 +124,10 @@ export class DeadlinesPageComponent implements OnInit {
   }
 
   onModalSubmit(): void {
-    console.log('Title: ' + this.title);
-    console.log('Expiration Date: ' + this.expirationDate);
-    console.log('Description: ' + this.description);
-    console.log(this.tokenStorage.getUser()._id);
+    // console.log('Title: ' + this.title);
+    // console.log('Expiration Date: ' + this.expirationDate);
+    // console.log('Description: ' + this.description);
+    // console.log(this.tokenStorage.getUser()._id);
 
     if (this.activeDeadline) {
       this.activeDeadline.title = this.title;
@@ -137,7 +143,8 @@ export class DeadlinesPageComponent implements OnInit {
           type: 'PUT_DEADLINE',
           payload: {
             deadline: this.activeDeadline,
-            deadlineId: this.activeDeadline._id
+            deadlineId: this.activeDeadline._id,
+            token: this.tokenStorage.getToken()
           }
         }
       ));
@@ -165,7 +172,8 @@ export class DeadlinesPageComponent implements OnInit {
         {
           type: 'POST_DEADLINE',
           payload: {
-            deadline: newDeadline
+            deadline: newDeadline,
+            token: this.tokenStorage.getToken()
           }
         }
       ));
